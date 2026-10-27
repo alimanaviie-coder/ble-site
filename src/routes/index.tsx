@@ -237,16 +237,22 @@ function Consultation({ lang }: { lang: Lang }) {
       notes: d.notes ?? "",
     });
     const g = d.guests ? parseInt(d.guests, 10) : null;
-    const { error } = await supabase.from("consultation_requests").insert({
-      name: d.name,
-      phone: d.phone,
-      event_date: d.event_date || null,
-      guests: g && g > 0 ? Math.min(g, 5000) : null,
-      event_type: d.event_type || null,
-      notes: d.notes || null,
-      language: lang,
-    });
-    setStatus(error ? "error" : "done");
+    let failed = false;
+    try {
+      const { error } = await supabase.from("consultation_requests").insert({
+        name: d.name,
+        phone: d.phone,
+        event_date: d.event_date || null,
+        guests: g && g > 0 ? Math.min(g, 5000) : null,
+        event_type: d.event_type || null,
+        notes: d.notes || null,
+        language: lang,
+      });
+      failed = !!error;
+    } catch {
+      failed = true;
+    }
+    setStatus(failed ? "error" : "done");
   }
 
   return (
