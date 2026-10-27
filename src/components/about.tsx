@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import type { Lang } from "@/lib/i18n";
 import { isRtl } from "@/lib/i18n";
 import img_event from "@/assets/gallery/event.webp";
@@ -138,6 +139,75 @@ export function Signature({ lang }: { lang: Lang }) {
             </li>
           ))}
         </ul>
+      </div>
+    </section>
+  );
+}
+
+const reelCopy: L3<{ title: string; sub: string; note: string; play: string; pause: string }> = {
+  en: { title: "Your evening, beautifully served", sub: "From the first guest to the last bite.", note: "Concept film", play: "Play video", pause: "Pause video" },
+  ar: { title: "أمسيتكم، تُقدَّم بأناقة", sub: "من الضيف الأول إلى آخر لقمة.", note: "فيلم تعريفي تصوّري", play: "تشغيل الفيديو", pause: "إيقاف الفيديو" },
+  fa: { title: "شب شما، با ظرافت سرو می‌شود", sub: "از اولین مهمان تا آخرین لقمه.", note: "فیلم مفهومی", play: "پخش ویدیو", pause: "توقف ویدیو" },
+};
+
+export function Reel({ lang }: { lang: Lang }) {
+  const c = reelCopy[lang];
+  const ref = useRef<HTMLVideoElement>(null);
+  const [playing, setPlaying] = useState(false);
+  useEffect(() => {
+    const v = ref.current;
+    if (!v) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) return;
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e?.isIntersecting) v.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
+        else { v.pause(); setPlaying(false); }
+      },
+      { threshold: 0.35 },
+    );
+    io.observe(v);
+    return () => io.disconnect();
+  }, []);
+  const toggle = () => {
+    const v = ref.current;
+    if (!v) return;
+    if (v.paused) v.play().then(() => setPlaying(true)).catch(() => undefined);
+    else { v.pause(); setPlaying(false); }
+  };
+  return (
+    <section id="reel" className="relative isolate overflow-hidden bg-ink text-cream" dir={isRtl(lang) ? "rtl" : "ltr"} aria-label={c.title}>
+      <video
+        ref={ref}
+        className="h-[70vh] min-h-[420px] w-full object-cover opacity-90"
+        src="/media/ble-reel.mp4"
+        poster="/media/ble-reel-poster.webp"
+        muted
+        loop
+        playsInline
+        preload="metadata"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/20 to-ink/30" aria-hidden="true" />
+      <div className="absolute inset-x-0 bottom-0 mx-auto flex max-w-6xl items-end justify-between gap-6 px-5 pb-10">
+        <div>
+          <h2 className="font-display text-4xl text-cream md:text-6xl">{c.title}</h2>
+          <p className="mt-3 text-lg text-cream/85">{c.sub}</p>
+        </div>
+        <div className="flex flex-col items-end gap-2">
+          <button
+            type="button"
+            onClick={toggle}
+            aria-label={playing ? c.pause : c.play}
+            className="flex h-12 w-12 items-center justify-center rounded-full border border-gold/70 bg-ink/50 text-cream backdrop-blur hover:bg-ink/70"
+          >
+            {playing ? (
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><rect x="3" y="2" width="3.5" height="12" /><rect x="9.5" y="2" width="3.5" height="12" /></svg>
+            ) : (
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M4 2l10 6-10 6z" /></svg>
+            )}
+          </button>
+          <span className="text-[11px] uppercase tracking-[0.2em] text-cream/60">{c.note}</span>
+        </div>
       </div>
     </section>
   );
