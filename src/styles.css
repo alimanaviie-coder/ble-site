@@ -1,0 +1,146 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-navy: var(--navy);
+  --color-ink: var(--ink);
+  --color-cream: var(--cream);
+  --color-gold: var(--gold);
+  --color-gold-soft: #e6b858;
+  --font-display: "Cormorant Garamond", "Vazirmatn", Georgia, serif;
+  --font-sans: "Jost", "Vazirmatn", system-ui, sans-serif;
+}
+
+:root {
+  --radius: 0.25rem;
+  --navy: oklch(0.17 0.05 272);
+  --ink: oklch(0.2 0 0);
+  --cream: oklch(0.993 0.017 100);
+  --gold: oklch(0.56 0.11 75);
+  --background: var(--cream);
+  --foreground: var(--navy);
+  --card: oklch(0.975 0.022 95);
+  --card-foreground: var(--navy);
+  --popover: var(--cream);
+  --popover-foreground: var(--navy);
+  --primary: var(--navy);
+  --primary-foreground: var(--cream);
+  --secondary: oklch(0.95 0.025 95);
+  --secondary-foreground: var(--navy);
+  --muted: oklch(0.95 0.02 95);
+  --muted-foreground: oklch(0.4 0.04 272);
+  --accent: var(--gold);
+  --accent-foreground: var(--cream);
+  --destructive: oklch(0.5 0.2 27);
+  --destructive-foreground: var(--cream);
+  --border: oklch(0.85 0.04 85);
+  --input: oklch(0.8 0.04 85);
+  --ring: var(--gold);
+}
+
+@layer base {
+  * { border-color: var(--color-border); }
+  html { scroll-behavior: smooth; }
+  body { background: var(--background); color: var(--foreground); font-family: var(--font-sans); }
+  [dir="rtl"] body, [dir="rtl"] { font-family: "Vazirmatn", system-ui, sans-serif; }
+  [dir="rtl"] .font-display { font-family: "Vazirmatn", serif; font-weight: 600; }
+  :focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+}
+
+@keyframes glow-morph {
+  0%, 100% { background: radial-gradient(circle, oklch(0.55 0.2 20 / 0.55), transparent 65%); }
+  33% { background: radial-gradient(circle, oklch(0.88 0.15 100 / 0.5), transparent 65%); }
+  66% { background: radial-gradient(circle, oklch(0.75 0.18 140 / 0.5), transparent 65%); }
+}
+@keyframes liquid-morph {
+  0%, 100% { background-color: oklch(0.55 0.2 20); }
+  33% { background-color: oklch(0.88 0.15 100); }
+  66% { background-color: oklch(0.72 0.18 140); }
+}
+@keyframes wheat-drift {
+  0% { transform: translateX(-30%) translateY(10%) rotate(-18deg); opacity: 0; }
+  15%, 85% { opacity: 0.9; }
+  100% { transform: translateX(130%) translateY(-10%) rotate(12deg); opacity: 0; }
+}
+
+@utility glow-morph { animation: glow-morph 12s ease-in-out infinite; }
+@utility liquid-morph { animation: liquid-morph 12s ease-in-out infinite; mix-blend-mode: color; }
+@utility wheat-drift { animation: wheat-drift 22s linear infinite; }
+@utility gold-rule { height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+
+@utility btn-cream {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+  padding: .85rem 1.5rem; border-radius: var(--radius);
+  background: var(--cream); color: var(--navy); font-weight: 500;
+  transition: transform .2s, box-shadow .2s;
+  &:hover { transform: translateY(-1px); box-shadow: 0 8px 24px -10px var(--gold); }
+}
+@utility btn-outline-gold {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+  padding: .85rem 1.5rem; border-radius: var(--radius);
+  border: 1px solid var(--gold); color: var(--cream); font-weight: 500;
+  transition: background .2s;
+  &:hover { background: color-mix(in oklab, var(--cream) 8%, transparent); }
+}
+@utility btn-navy {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+  padding: .85rem 1.5rem; border-radius: var(--radius);
+  background: var(--navy); color: var(--cream); font-weight: 500;
+  transition: opacity .2s;
+  &:hover { opacity: .9; }
+  &:disabled { opacity: .6; }
+}
+@utility field {
+  width: 100%; padding: .7rem .9rem; border-radius: var(--radius);
+  border: 1px solid var(--input); background: var(--cream); color: var(--navy);
+}
+
+@keyframes marquee { to { transform: translateX(-50%); } }
+@keyframes sway { from { transform: rotate(-4deg); } to { transform: rotate(4deg); } }
+@keyframes pin { from { opacity: 0; transform: translateY(50px) scale(.9); } to { opacity: 1; transform: none; } }
+@keyframes sweep {
+  0% { transform: translateX(110vw) rotate(10deg); opacity: 0; }
+  15%, 85% { opacity: .95; }
+  100% { transform: translateX(-30vw) rotate(-8deg); opacity: 0; }
+}
+@keyframes sweep-rtl {
+  0% { transform: translateX(-110vw) rotate(-10deg); opacity: 0; }
+  15%, 85% { opacity: .95; }
+  100% { transform: translateX(30vw) rotate(8deg); opacity: 0; }
+}
+@utility marquee { animation: marquee 50s linear infinite; &:hover { animation-play-state: paused; } }
+@utility marquee-rev { animation: marquee 50s linear infinite reverse; &:hover { animation-play-state: paused; } }
+@utility sway { animation: sway 5.5s ease-in-out infinite alternate; transform-origin: 50% 100%; }
+@utility pin { animation: pin 1s cubic-bezier(.2, 1.2, .4, 1); }
+@utility sweep { animation: sweep 1.9s cubic-bezier(.5, 0, .3, 1) both; }
+[dir="rtl"] .sweep { animation-name: sweep-rtl; }
