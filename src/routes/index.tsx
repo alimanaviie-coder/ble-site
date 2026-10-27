@@ -2,8 +2,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, type FormEvent } from "react";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
-import { dict, detectLang, isRtl, LANGS, suggestPackage, type Budget, type Lang, type PackageKey } from "@/lib/i18n";
+import { dict, isRtl, LANGS, suggestPackage, type Budget, type Lang, type PackageKey } from "@/lib/i18n";
 import { Logo } from "@/components/Logo";
+import { seoHead, PATHS } from "@/lib/seo";
+import { Link } from "@tanstack/react-router";
 import { CONTACT_EMAIL } from "@/lib/config";
 import { notifyOwnerWhatsApp } from "@/lib/notify";
 import { Hero, MenuSection, Reviews, FloatingContact, Deliver, type Lead } from "@/components/extras";
@@ -13,42 +15,20 @@ import imgParty from "@/assets/pkg-party.jpg";
 import imgEvent from "@/assets/pkg-event.jpg";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Blé Pastry & Bakery — Event & Party Catering, Muscat" },
-      { name: "description", content: "Finger food, savory and sweet boxes and bottled drinks for gatherings, parties and events in Muscat, Oman." },
-      { property: "og:title", content: "Blé Pastry & Bakery — Every celebration begins here" },
-      { property: "og:description", content: "Event and party catering from our Muscat bakery. Request a consultation." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
-  component: Index,
+  head: () => seoHead("en"),
+  component: () => <Home lang="en" />,
 });
 
 const IG = INSTAGRAM_URL;
 const images: Record<PackageKey, string> = { gathering: imgGathering, party: imgParty, event: imgEvent };
 const keys: PackageKey[] = ["gathering", "party", "event"];
 
-function Index() {
-  const [lang, setLang] = useState<Lang>("en");
-  useEffect(() => setLang(detectLang()), []);
+export function Home({ lang }: { lang: Lang }) {
   useEffect(() => {
     document.documentElement.lang = lang;
     document.documentElement.dir = isRtl(lang) ? "rtl" : "ltr";
-    const seo: Record<Lang, [string, string]> = {
-      en: ["Blé Pastry & Bakery — Event & Party Catering in Muscat", "Finger food, savory and sweet boxes, bruschetta and bottled drinks for parties, weddings and corporate events in Muscat, Oman."],
-      ar: ["بليه للمعجنات والمخبوزات — ضيافة وحفلات ومناسبات في مسقط", "فينجر فود وصناديق مالحة وحلوة وبروسكيتا ومشروبات معبأة للحفلات والأعراس وفعاليات الشركات في مسقط، سلطنة عمان."],
-      fa: ["بله — کیترینگ مهمانی و ایونت در مسقط", "فینگرفود، باکس شور و شیرین، بروسکتا و نوشیدنی بطری برای مهمانی، عروسی و رویداد شرکتی در مسقط عمان."],
-    };
-    document.title = seo[lang][0];
-    document.querySelector('meta[name="description"]')?.setAttribute("content", seo[lang][1]);
   }, [lang]);
   const t = dict[lang];
-  const choose = (l: Lang) => {
-    setLang(l);
-    localStorage.setItem("ble-lang", l);
-  };
 
   return (
     <div dir={isRtl(lang) ? "rtl" : "ltr"} lang={lang} className="min-h-screen">
@@ -66,15 +46,17 @@ function Index() {
           </nav>
           <div role="group" aria-label="Language" className="flex rounded border border-gold/50 text-sm">
             {LANGS.map((l) => (
-              <button
+              <Link
                 key={l.code}
-                onClick={() => choose(l.code)}
-                aria-pressed={lang === l.code}
+                to={PATHS[l.code]}
+                hrefLang={l.code}
+                aria-current={lang === l.code ? "page" : undefined}
                 lang={l.code}
+                onClick={() => { try { localStorage.setItem("ble-lang", l.code); } catch { /* ignore */ } }}
                 className={`px-3 py-1.5 ${lang === l.code ? "bg-cream text-navy" : "text-cream/80 hover:text-cream"}`}
               >
                 {l.label}
-              </button>
+              </Link>
             ))}
           </div>
         </div>

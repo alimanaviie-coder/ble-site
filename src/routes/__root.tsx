@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
+  useRouterState,
   Outlet,
   Link,
   createRootRouteWithContext,
@@ -78,14 +79,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Blé Pastry & Bakery — Event Catering in Muscat" },
-      { name: "description", content: "Finger food, boxes and bottled drinks for parties and events in Muscat." },
       { name: "theme-color", content: "#09102B" },
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "Blé Pastry & Bakery" },
-      { property: "og:title", content: "Blé Pastry & Bakery — Event Catering in Muscat" },
-      { property: "og:description", content: "Finger food, boxes and bottled drinks for parties and events in Muscat." },
-      { property: "og:url", content: "https://bleoman.com/" },
       { property: "og:image", content: "https://bleoman.com/og.jpg" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:image", content: "https://bleoman.com/og.jpg" },
@@ -114,7 +110,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Jost:wght@400;500&family=Vazirmatn:wght@400;500;600&display=swap",
       },
-      { rel: "canonical", href: "https://bleoman.com/" },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
   }),
@@ -125,8 +120,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 });
 
 function RootShell({ children }: { children: ReactNode }) {
+  const path = useRouterState({ select: (st) => st.location.pathname });
+  const lang = path.startsWith("/ar") ? "ar" : path.startsWith("/fa") ? "fa" : "en";
   return (
-    <html lang="en">
+    <html lang={lang} dir={lang === "en" ? "ltr" : "rtl"}>
       <head>
         <HeadContent />
       </head>
