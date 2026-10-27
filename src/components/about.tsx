@@ -37,9 +37,9 @@ const gallery: { src: string; w: number; h: number; alt: L3<string> }[] = [
 ];
 
 const galleryTitle: L3<[string, string]> = {
-  en: ["From our kitchen", "A look at what we prepare for your table."],
-  ar: ["من مطبخنا", "نظرة على ما نحضّره لمائدتكم."],
-  fa: ["از آشپزخانه ما", "نگاهی به آنچه برای سفره شما آماده می‌کنیم."],
+  en: ["Moments from our table", "A look at what we prepare for your celebrations."],
+  ar: ["لحظات من مائدتنا", "نظرة على ما نحضّره لاحتفالاتكم."],
+  fa: ["لحظه‌هایی از سفره ما", "نگاهی به آنچه برای جشن‌های شما آماده می‌کنیم."],
 };
 
 export function Gallery({ lang }: { lang: Lang }) {

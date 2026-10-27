@@ -26,6 +26,16 @@ const keys: PackageKey[] = ["gathering", "party", "event"];
 
 export function Home({ lang }: { lang: Lang }) {
   useEffect(() => {
+    const els = document.querySelectorAll<HTMLElement>("main section:not(:first-child)");
+    if (!("IntersectionObserver" in window)) return;
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }),
+      { threshold: 0.08 },
+    );
+    els.forEach((el) => { el.classList.add("reveal"); io.observe(el); });
+    return () => io.disconnect();
+  }, []);
+  useEffect(() => {
     document.documentElement.lang = lang;
     document.documentElement.dir = isRtl(lang) ? "rtl" : "ltr";
   }, [lang]);
@@ -38,7 +48,7 @@ export function Home({ lang }: { lang: Lang }) {
           {t.bar.text}
         </a>
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3">
-          <a href="#top" aria-label="Blé home"><Logo /></a>
+          <a href="#top" aria-label="Blé home"><Logo className="h-10 w-auto md:h-11" /></a>
           <nav className="hidden gap-6 text-sm text-cream/80 md:flex">
             <a href="#menu" className="hover:text-cream">{t.nav.menu}</a>
             <a href="#packages" className="hover:text-cream">{t.nav.packages}</a>
@@ -124,7 +134,7 @@ export function Home({ lang }: { lang: Lang }) {
 
       <footer className="bg-ink py-10 text-cream/80">
         <div className="mx-auto flex max-w-6xl flex-col gap-4 px-5 md:flex-row md:items-center md:justify-between">
-          <div className="flex items-center gap-4"><Logo /><span className="text-sm">{t.footer.line}</span></div>
+          <div className="flex items-center gap-4"><Logo className="h-12 w-auto" /><span className="text-sm">{t.footer.line}</span></div>
           <div className="flex flex-col gap-1 text-sm md:items-end">
             <a href={IG} target="_blank" rel="noreferrer" className="text-cream hover:text-gold" dir="ltr">Instagram @ble.oman</a>
             <span>{t.footer.talabat}</span>

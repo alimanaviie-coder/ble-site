@@ -1,13 +1,7 @@
-export function Logo({ className = "" }: { className?: string }) {
-  return (
-    <span className={`inline-flex items-center gap-2 text-gold ${className}`} dir="ltr" aria-label="Blé">
-      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
-        <rect x="1" y="1" width="20" height="20" stroke="currentColor" strokeWidth="1.5" />
-        <path d="M1 21L21 1" stroke="currentColor" strokeWidth="1.5" />
-      </svg>
-      <span className="font-display text-2xl leading-none" style={{ fontFamily: '"Cormorant Garamond", serif' }}>Blé</span>
-    </span>
-  );
+import logoImg from "@/assets/logo-ble.png";
+
+export function Logo({ className = "h-10 w-auto" }: { className?: string }) {
+  return <img src={logoImg} alt="Blé" width={631} height={224} className={className} decoding="async" />;
 }
 
 export function Wheat({ className = "" }: { className?: string }) {
