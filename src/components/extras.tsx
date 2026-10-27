@@ -146,28 +146,25 @@ export function MenuSection({ lang }: { lang: Lang }) {
   );
 }
 
-/** Customer satisfaction strip: two rows scrolling in opposite directions. Placeholder reviews are labeled. */
+/** Calm customer-satisfaction row. The wording is placeholder text and is labeled as such until real reviews arrive. */
 export function Reviews({ lang }: { lang: Lang }) {
   const t = dict[lang];
-  const types = Object.values(t.form.types);
-  const cards = t.extra.rev.q.map((q, i) => ({ q, ty: types[i] ?? "" }));
-  const row = (cls: string) => (
-    <div dir="ltr" className="my-3 overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_8%,#000_92%,transparent)] motion-reduce:overflow-x-auto">
-      <div className={`flex w-max gap-4 ${cls}`}>
-        {[...cards, ...cards].map((c, i) => (
-          <figure key={i} aria-hidden={i >= cards.length ? true : undefined} dir={isRtl(lang) ? "rtl" : "ltr"} className="w-[310px] shrink-0 rounded border border-gold/40 bg-cream/5 p-5 text-start text-sm">
-            <div className="tracking-[0.2em] text-gold-soft" aria-hidden="true">★★★★★</div>
-            <blockquote className="mt-2">“{c.q}”</blockquote>
-            <figcaption className="mt-3 text-xs text-cream/70">{t.extra.rev.sample} · {c.ty}</figcaption>
-          </figure>
-        ))}
-      </div>
-    </div>
-  );
   return (
-    <section id="reviews" className="bg-navy py-20 text-cream">
-      <div className="mx-auto max-w-6xl px-5"><h2 className="font-display text-4xl md:text-5xl">{t.extra.rev.title}</h2></div>
-      <div className="mt-8">{row("marquee")}{row("marquee-rev")}</div>
+    <section id="reviews" className="bg-navy py-20 text-cream" dir={isRtl(lang) ? "rtl" : "ltr"}>
+      <div className="mx-auto max-w-6xl px-5">
+        <h2 className="font-display text-4xl md:text-5xl">{t.extra.rev.title}</h2>
+        <ul className="mt-10 grid gap-5 md:grid-cols-3">
+          {t.extra.rev.q.map((q) => (
+            <li key={q}>
+              <figure className="h-full rounded border border-gold/40 bg-cream/5 p-6">
+                <div className="tracking-[0.25em] text-gold-soft" aria-hidden="true">★★★★★</div>
+                <blockquote className="mt-3 font-display text-2xl leading-snug">“{q}”</blockquote>
+              </figure>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-6 text-xs text-cream/60">{t.extra.rev.sample}</p>
+      </div>
     </section>
   );
 }

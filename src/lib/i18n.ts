@@ -91,7 +91,7 @@ const en = {
   extra: {
     menu: { title: "From our kitchen", sub: "Finger food, boxes and sweets for every occasion. Tell us about your event and we'll send a personal proposal.", cats: ["Savory & Finger Food", "Lunch & Mains", "Persian Cuisine", "Sweets & Pastry", "Bruschetta", "Weddings & Occasions"], req: "Request this menu" },
     plan: { type: "Event type", guests: "Guests", go: "Get my proposal", req: "Request this", chip: "Planning an event? Tell us in 30 seconds." },
-    rev: { title: "Loved by our guests", sample: "Sample review", q: ["Beautiful boxes, everything arrived fresh.", "Our guests kept asking where it was from.", "Easy to order and right on time.", "The drinks were a hit.", "Elegant and delicious."] },
+    rev: { title: "Loved by our guests", sample: "Sample wording while we collect real guest reviews.", q: ["Everything arrived fresh and right on time.", "Our guests kept asking where the food was from.", "Easy to order, and it looked beautiful on the table."] },
     wa: { send: "Send on WhatsApp", mail: "Send by email", note: "Send your request on WhatsApp or email now to speed things up.", hello: "Hello Blé! New consultation request" },
     drinks: { names: ["Red Juice", "Fresh Lemonade", "Mint Mojito"], line: "Fresh, natural and made with real fruits.", pause: "Pause", play: "Play" },
   },
@@ -162,7 +162,7 @@ const ar: Dict = {
   extra: {
     menu: { title: "من مطبخنا", sub: "مقبلات وصناديق وحلويات لكل مناسبة. أخبرنا عن مناسبتك وسنرسل لك عرضًا خاصًا.", cats: ["مقبلات ومالحات", "غداء ووجبات رئيسية", "المطبخ الفارسي", "حلويات ومعجنات", "بروسكيتا", "الأعراس والمناسبات"], req: "اطلب هذه القائمة" },
     plan: { type: "نوع المناسبة", guests: "عدد الضيوف", go: "احصل على عرضي", req: "اطلب هذا", chip: "تخطّط لمناسبة؟ أخبرنا في ٣٠ ثانية." },
-    rev: { title: "محبوبون من ضيوفنا", sample: "تقييم تجريبي", q: ["صناديق جميلة وكل شيء وصل طازجًا.", "ضيوفنا سألوا من أين هذا.", "سهل الطلب وفي الموعد تمامًا.", "المشروبات كانت نجاحًا.", "أنيق ولذيذ."] },
+    rev: { title: "محبوبون من ضيوفنا", sample: "نصوص توضيحية ريثما نجمع تقييمات ضيوفنا الحقيقية.", q: ["وصل كل شيء طازجًا وفي الموعد تمامًا.", "ظل ضيوفنا يسألون من أين الطعام.", "الطلب سهل، وكان شكله جميلًا على المائدة."] },
     wa: { send: "أرسل عبر واتساب", mail: "أرسل بالبريد", note: "أرسل طلبك الآن عبر واتساب أو البريد لتسريع الأمر.", hello: "مرحبًا Blé! طلب استشارة جديد" },
     drinks: { names: ["العصير الأحمر", "ليمونادة طازجة", "موهيتو بالنعناع"], line: "طازج وطبيعي ومصنوع من فواكه حقيقية.", pause: "إيقاف", play: "تشغيل" },
   },
@@ -232,7 +232,7 @@ const fa: Dict = {
   extra: {
     menu: { title: "از آشپزخانهٔ ما", sub: "فینگرفود، باکس و شیرینی برای هر مناسبت. دربارهٔ مراسمتان بگویید تا پیشنهاد شخصی بفرستیم.", cats: ["شور و فینگرفود", "ناهار و غذای اصلی", "غذاهای ایرانی", "شیرینی و پیراشکی", "بروسکتا", "عروسی و مناسبت‌ها"], req: "درخواست این منو" },
     plan: { type: "نوع مراسم", guests: "تعداد مهمان", go: "پیشنهاد من را بده", req: "درخواست این مورد", chip: "مراسم دارید؟ در ۳۰ ثانیه بگویید." },
-    rev: { title: "محبوب مهمان‌هایمان", sample: "نظر نمونه", q: ["باکس‌های زیبا و همه‌چیز تازه رسید.", "مهمان‌ها مدام می‌پرسیدند از کجاست.", "سفارش آسان و سر وقت.", "نوشیدنی‌ها حسابی خوشمزه بودند.", "شیک و خوشمزه."] },
+    rev: { title: "محبوب مهمان‌هایمان", sample: "متن نمونه تا زمان جمع‌آوری نظرهای واقعی مهمان‌ها.", q: ["همه‌چیز تازه و سر وقت رسید.", "مهمان‌ها مدام می‌پرسیدند غذا از کجاست.", "سفارش دادنش راحت بود و روی میز خیلی قشنگ شد."] },
     wa: { send: "ارسال در واتساپ", mail: "ارسال با ایمیل", note: "همین حالا درخواست را در واتساپ یا ایمیل بفرستید تا سریع‌تر هماهنگ شود.", hello: "سلام Blé! درخواست مشاورهٔ جدید" },
     drinks: { names: ["آب‌میوهٔ قرمز", "لیموناد تازه", "موهیتو نعناع"], line: "تازه، طبیعی و ساخته‌شده از میوهٔ واقعی.", pause: "توقف", play: "پخش" },
   },
