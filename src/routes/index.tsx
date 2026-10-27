@@ -4,6 +4,7 @@ import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { dict, isRtl, LANGS, suggestPackage, type Budget, type Lang, type PackageKey } from "@/lib/i18n";
 import { Logo } from "@/components/Logo";
+import { Gallery, About, ABOUT_NAV } from "@/components/about";
 import { seoHead, PATHS } from "@/lib/seo";
 import { Link } from "@tanstack/react-router";
 import { CONTACT_EMAIL } from "@/lib/config";
@@ -42,6 +43,7 @@ export function Home({ lang }: { lang: Lang }) {
             <a href="#menu" className="hover:text-cream">{t.nav.menu}</a>
             <a href="#packages" className="hover:text-cream">{t.nav.packages}</a>
             <a href="#suggest" className="hover:text-cream">{t.nav.suggest}</a>
+            <a href="#about" className="hover:text-cream">{ABOUT_NAV[lang]}</a>
             <a href="#consult" className="hover:text-cream">{t.nav.contact}</a>
           </nav>
           <div role="group" aria-label="Language" className="flex rounded border border-gold/50 text-sm">
@@ -113,6 +115,8 @@ export function Home({ lang }: { lang: Lang }) {
           </div>
         </section>
 
+        <Gallery lang={lang} />
+        <About lang={lang} />
         <Suggester lang={lang} />
         <Reviews lang={lang} />
         <Consultation lang={lang} />
