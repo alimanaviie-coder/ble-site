@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { dict, detectLang, isRtl, LANGS, suggestPackage, type Budget, type Lang, type PackageKey } from "@/lib/i18n";
 import { Logo } from "@/components/Logo";
 import { CONTACT_EMAIL } from "@/lib/config";
+import { notifyOwnerWhatsApp } from "@/lib/notify";
 import { Hero, MenuSection, Reviews, FloatingContact, Deliver, type Lead } from "@/components/extras";
 import { INSTAGRAM_URL } from "@/lib/config";
 import imgGathering from "@/assets/pkg-gathering.jpg";
@@ -276,7 +277,23 @@ function Consultation({ lang }: { lang: Lang }) {
     } catch {
       emailed = false;
     }
-    setStatus(failed && !emailed ? "error" : "done");
+    let waSent = false;
+    try {
+      const r2 = await notifyOwnerWhatsApp({
+        data: {
+          name: d.name,
+          phone: d.phone,
+          type: d.event_type ? (dict.en.form.types as Record<string, string>)[d.event_type] ?? d.event_type : "",
+          date: d.event_date ?? "",
+          guests: d.guests ?? "",
+          notes: d.notes ?? "",
+        },
+      });
+      waSent = r2.ok;
+    } catch {
+      waSent = false;
+    }
+    setStatus(failed && !emailed && !waSent ? "error" : "done");
   }
 
   return (
