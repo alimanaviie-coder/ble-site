@@ -4,6 +4,7 @@ import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { dict, detectLang, isRtl, LANGS, suggestPackage, type Budget, type Lang, type PackageKey } from "@/lib/i18n";
 import { Logo } from "@/components/Logo";
+import { CONTACT_EMAIL } from "@/lib/config";
 import { Hero, MenuSection, Reviews, FloatingContact, Deliver, type Lead } from "@/components/extras";
 import { INSTAGRAM_URL } from "@/lib/config";
 import imgGathering from "@/assets/pkg-gathering.jpg";
@@ -252,7 +253,30 @@ function Consultation({ lang }: { lang: Lang }) {
     } catch {
       failed = true;
     }
-    setStatus(failed ? "error" : "done");
+    // Automatic email to the owner (no click needed from the visitor).
+    let emailed = false;
+    try {
+      const res = await fetch(`https://formsubmit.co/ajax/${CONTACT_EMAIL}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          _subject: `New event request — ${d.name}`,
+          _template: "table",
+          _captcha: "false",
+          name: d.name,
+          phone: d.phone,
+          event_type: d.event_type || "-",
+          event_date: d.event_date || "-",
+          guests: d.guests || "-",
+          notes: d.notes || "-",
+          language: lang,
+        }),
+      });
+      emailed = res.ok;
+    } catch {
+      emailed = false;
+    }
+    setStatus(failed && !emailed ? "error" : "done");
   }
 
   return (
