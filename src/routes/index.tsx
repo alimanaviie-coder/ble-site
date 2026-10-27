@@ -4,7 +4,7 @@ import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { dict, isRtl, LANGS, suggestPackage, type Budget, type Lang, type PackageKey } from "@/lib/i18n";
 import { Logo } from "@/components/Logo";
-import { Gallery, About, ABOUT_NAV } from "@/components/about";
+import { Gallery, About, Signature, ABOUT_NAV } from "@/components/about";
 import { seoHead, PATHS } from "@/lib/seo";
 import { Link } from "@tanstack/react-router";
 import { CONTACT_EMAIL } from "@/lib/config";
@@ -93,6 +93,7 @@ export function Home({ lang }: { lang: Lang }) {
           </div>
         </section>
 
+        <Signature lang={lang} />
         <MenuSection lang={lang} />
 
         {/* PACKAGES */}

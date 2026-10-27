@@ -107,3 +107,38 @@ export function About({ lang }: { lang: Lang }) {
     </section>
   );
 }
+
+const sig: L3<{ eyebrow: string; title: string; items: [string, string, string] }> = {
+  en: { eyebrow: "Signature", title: "Made by hand, served with care", items: ["Bruschetta", "Fruit tartlets", "Savory choux"] },
+  ar: { eyebrow: "توقيعنا", title: "صُنعت يدوياً، تُقدَّم بعناية", items: ["بروسكيتا", "تارتات الفواكه", "كرات الشو المالحة"] },
+  fa: { eyebrow: "امضای ما", title: "با دست ساخته می‌شود، با دقت سرو می‌شود", items: ["بروسکتا", "تارت میوه‌ای", "شوی شور"] },
+};
+
+export function Signature({ lang }: { lang: Lang }) {
+  const c = sig[lang];
+  const pics = [
+    { src: img_bruschetta, w: 750, h: 1000, alt: gallery.find((g) => g.src === img_bruschetta)!.alt[lang], offset: "md:mt-0" },
+    { src: img_tartlets, w: 750, h: 1000, alt: gallery.find((g) => g.src === img_tartlets)!.alt[lang], offset: "md:mt-16" },
+    { src: img_savory_puff, w: 586, h: 1000, alt: gallery.find((g) => g.src === img_savory_puff)!.alt[lang], offset: "md:mt-6" },
+  ];
+  return (
+    <section id="signature" className="bg-navy py-20 text-cream" dir={isRtl(lang) ? "rtl" : "ltr"}>
+      <div className="mx-auto max-w-6xl px-5">
+        <p className="text-xs uppercase tracking-[0.3em] text-gold-soft">{c.eyebrow}</p>
+        <h2 className="mt-3 max-w-2xl font-display text-4xl text-cream md:text-5xl">{c.title}</h2>
+        <ul className="mt-12 grid gap-6 md:grid-cols-3 md:gap-8">
+          {pics.map((p, i) => (
+            <li key={p.src} className={p.offset}>
+              <figure>
+                <div className="overflow-hidden rounded-t-[999px] border border-gold/50">
+                  <img src={p.src} alt={p.alt} width={p.w} height={p.h} loading="lazy" className="aspect-[3/4] w-full object-cover transition-transform duration-1000 hover:scale-105 motion-reduce:transition-none" />
+                </div>
+                <figcaption className="mt-4 font-display text-2xl text-cream/90">{c.items[i]}</figcaption>
+              </figure>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  );
+}
