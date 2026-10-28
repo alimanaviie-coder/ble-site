@@ -1,39 +1,103 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { WHATSAPP_NUMBER } from "@/lib/config";
+import { CONTACT_EMAIL } from "@/lib/config";
+import { supabase } from "@/integrations/supabase/client";
+
+const clean = (s: string) => s.replace(/[\u0000-\u001f\u007f]+/g, " ").trim();
 
 const input = z.object({
-  name: z.string().max(200),
-  phone: z.string().max(60),
-  type: z.string().max(100).optional(),
-  date: z.string().max(40).optional(),
-  guests: z.string().max(20).optional(),
-  notes: z.string().max(1000).optional(),
+  name: z.string().trim().min(1).max(100),
+  phone: z.string().trim().min(5).max(30),
+  event_type: z.string().max(60).optional().default(""),
+  event_type_label: z.string().max(100).optional().default(""),
+  event_date: z.string().max(20).optional().default(""),
+  guests: z.string().max(6).optional().default(""),
+  notes: z.string().max(1000).optional().default(""),
+  language: z.enum(["en", "ar", "fa"]),
+  // Bot traps: "website" must stay empty and the form must have been open for a few seconds.
+  website: z.string().max(200).optional().default(""),
+  openedAt: z.number().optional().default(0),
 });
 
-// Sends a WhatsApp message to the owner through CallMeBot.
-// The API key lives only in the server environment (CALLMEBOT_APIKEY), never in the repo or the browser.
-export const notifyOwnerWhatsApp = createServerFn({ method: "POST" })
+function whatsappDigits(phone: string) {
+  const d = phone.replace(/[^\d]/g, "").replace(/^00/, "");
+  if (d.length === 8) return `968${d}`; // local Omani number
+  return d;
+}
+
+/**
+ * Receives a consultation request, then: saves it, emails the owner and pushes a phone alert.
+ * Secrets live only in the Worker environment: RESEND_API_KEY, NTFY_TOPIC.
+ */
+export const submitLead = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => input.parse(d))
   .handler(async ({ data }) => {
-    const key = process.env["CALLMEBOT_APIKEY"];
-    if (!key) return { ok: false as const };
-    const text = [
-      "New event request",
-      `Name: ${data.name}`,
-      `Phone: ${data.phone}`,
-      data.type ? `Event: ${data.type}` : "",
-      data.date ? `Date: ${data.date}` : "",
-      data.guests ? `Guests: ${data.guests}` : "",
-      data.notes ? `Notes: ${data.notes}` : "",
-    ]
-      .filter(Boolean)
-      .join("\n");
-    try {
-      const url = `https://api.callmebot.com/whatsapp.php?phone=${WHATSAPP_NUMBER}&text=${encodeURIComponent(text)}&apikey=${encodeURIComponent(key)}`;
-      const res = await fetch(url);
-      return { ok: res.ok as boolean };
-    } catch {
-      return { ok: false as const };
-    }
+    const tooFast = !data.openedAt || Date.now() - data.openedAt < 2500;
+    if (data.website || tooFast) return { ok: true as const }; // quietly ignore bots
+
+    const name = clean(data.name);
+    const phone = clean(data.phone);
+    const notes = clean(data.notes);
+    const lines = [
+      `Name: ${name}`,
+      `Phone: ${phone}`,
+      `Event: ${clean(data.event_type_label) || "-"}`,
+      `Date: ${data.event_date || "-"}`,
+      `Guests: ${data.guests || "-"}`,
+      `Notes: ${notes || "-"}`,
+      `Language: ${data.language}`,
+    ];
+    const text = lines.join("\n");
+    const waLink = `https://wa.me/${whatsappDigits(phone)}`;
+
+    const saveDb = async () => {
+      const g = data.guests ? parseInt(data.guests, 10) : null;
+      const { error } = await supabase.from("consultation_requests").insert({
+        name,
+        phone,
+        event_date: data.event_date || null,
+        guests: g && g > 0 ? Math.min(g, 5000) : null,
+        event_type: data.event_type || null,
+        notes: notes || null,
+        language: data.language,
+      });
+      return !error;
+    };
+
+    const sendEmail = async () => {
+      const key = process.env["RESEND_API_KEY"];
+      if (!key) return false;
+      const res = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          from: "Blé Website <onboarding@resend.dev>",
+          to: [CONTACT_EMAIL],
+          subject: `New event request: ${name}`,
+          text: `${text}\n\nReply on WhatsApp: ${waLink}`,
+        }),
+      });
+      return res.ok;
+    };
+
+    const sendPush = async () => {
+      const topic = process.env["NTFY_TOPIC"];
+      if (!topic) return false;
+      const res = await fetch(`https://ntfy.sh/${encodeURIComponent(topic)}`, {
+        method: "POST",
+        headers: { Title: "New Ble event request", Click: waLink, Priority: "high", Tags: "tada" },
+        body: `${text}\n\nTap to open WhatsApp with the customer.`,
+      });
+      return res.ok;
+    };
+
+    const settle = async (fn: () => Promise<boolean>) => {
+      try {
+        return await fn();
+      } catch {
+        return false;
+      }
+    };
+    const [db, email, push] = await Promise.all([settle(saveDb), settle(sendEmail), settle(sendPush)]);
+    return { ok: db || email || push };
   });

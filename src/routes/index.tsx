@@ -1,14 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { z } from "zod";
-import { supabase } from "@/integrations/supabase/client";
 import { dict, isRtl, LANGS, suggestPackage, type Budget, type Lang, type PackageKey } from "@/lib/i18n";
 import { Logo } from "@/components/Logo";
 import { Gallery, About, Signature, Reel, ABOUT_NAV } from "@/components/about";
 import { seoHead, PATHS } from "@/lib/seo";
 import { Link } from "@tanstack/react-router";
-import { CONTACT_EMAIL } from "@/lib/config";
-import { notifyOwnerWhatsApp } from "@/lib/notify";
+import { submitLead } from "@/lib/notify";
 import { Hero, MenuSection, Reviews, FloatingContact, Deliver, type Lead } from "@/components/extras";
 import { INSTAGRAM_URL } from "@/lib/config";
 import imgGathering from "@/assets/pkg-gathering.jpg";
@@ -190,6 +188,8 @@ function Suggester({ lang }: { lang: Lang }) {
 function Consultation({ lang }: { lang: Lang }) {
   const t = dict[lang].form;
   const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">("idle");
+  const openedAt = useRef(0);
+  useEffect(() => { openedAt.current = Date.now(); }, []);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [type, setType] = useState("");
   const [guestsV, setGuestsV] = useState("");
@@ -236,62 +236,27 @@ function Consultation({ lang }: { lang: Lang }) {
       guests: d.guests ?? "",
       notes: d.notes ?? "",
     });
-    const g = d.guests ? parseInt(d.guests, 10) : null;
-    let failed = false;
+    let ok = false;
     try {
-      const { error } = await supabase.from("consultation_requests").insert({
-        name: d.name,
-        phone: d.phone,
-        event_date: d.event_date || null,
-        guests: g && g > 0 ? Math.min(g, 5000) : null,
-        event_type: d.event_type || null,
-        notes: d.notes || null,
-        language: lang,
-      });
-      failed = !!error;
-    } catch {
-      failed = true;
-    }
-    // Automatic email to the owner (no click needed from the visitor).
-    let emailed = false;
-    try {
-      const res = await fetch(`https://formsubmit.co/ajax/${CONTACT_EMAIL}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({
-          _subject: `New event request — ${d.name}`,
-          _template: "table",
-          _captcha: "false",
-          name: d.name,
-          phone: d.phone,
-          event_type: d.event_type || "-",
-          event_date: d.event_date || "-",
-          guests: d.guests || "-",
-          notes: d.notes || "-",
-          language: lang,
-        }),
-      });
-      emailed = res.ok;
-    } catch {
-      emailed = false;
-    }
-    let waSent = false;
-    try {
-      const r2 = await notifyOwnerWhatsApp({
+      const r2 = await submitLead({
         data: {
           name: d.name,
           phone: d.phone,
-          type: d.event_type ? (dict.en.form.types as Record<string, string>)[d.event_type] ?? d.event_type : "",
-          date: d.event_date ?? "",
+          event_type: d.event_type ?? "",
+          event_type_label: d.event_type ? (dict.en.form.types as Record<string, string>)[d.event_type] ?? d.event_type : "",
+          event_date: d.event_date ?? "",
           guests: d.guests ?? "",
           notes: d.notes ?? "",
+          language: lang,
+          website: fd["website"] ?? "",
+          openedAt: openedAt.current,
         },
       });
-      waSent = r2.ok;
+      ok = r2.ok;
     } catch {
-      waSent = false;
+      ok = false;
     }
-    setStatus(failed && !emailed && !waSent ? "error" : "done");
+    setStatus(ok ? "done" : "error");
   }
 
   return (
@@ -309,6 +274,9 @@ function Consultation({ lang }: { lang: Lang }) {
         ) : (
           <>
             <form onSubmit={onSubmit} noValidate className="mt-10 grid gap-5 sm:grid-cols-2">
+              <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
+                <label>Website<input type="text" name="website" tabIndex={-1} autoComplete="off" /></label>
+              </div>
               <Field label={t.name} error={errors["name"]}><input name="name" required maxLength={100} className="field" autoComplete="name" /></Field>
               <Field label={t.phone} error={errors["phone"]}><input name="phone" type="tel" required maxLength={30} className="field" dir="ltr" autoComplete="tel" /></Field>
               <Field label={t.date}><input name="event_date" type="date" min={minDate} className="field" /></Field>
