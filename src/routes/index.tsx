@@ -7,7 +7,7 @@ import { Gallery, About, Signature, Reel, ABOUT_NAV } from "@/components/about";
 import { seoHead, PATHS } from "@/lib/seo";
 import { Link } from "@tanstack/react-router";
 import { submitLead } from "@/lib/notify";
-import { Hero, MenuSection, Reviews, FloatingContact, Deliver, type Lead } from "@/components/extras";
+import { Hero, MenuSection, Reviews, Faq, FloatingContact, Deliver, type Lead } from "@/components/extras";
 import { INSTAGRAM_URL } from "@/lib/config";
 import imgGathering from "@/assets/pkg-gathering.jpg";
 import imgParty from "@/assets/pkg-party.jpg";
@@ -129,6 +129,7 @@ export function Home({ lang }: { lang: Lang }) {
         <About lang={lang} />
         <Suggester lang={lang} />
         <Reviews lang={lang} />
+        <Faq lang={lang} />
         <Consultation lang={lang} />
       </main>
 

@@ -2,6 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://bleoman.com/</loc>
+    <lastmod>2026-10-28</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://bleoman.com/"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://bleoman.com/ar"/>
     <xhtml:link rel="alternate" hreflang="fa" href="https://bleoman.com/fa"/>
@@ -9,6 +10,7 @@
   </url>
   <url>
     <loc>https://bleoman.com/ar</loc>
+    <lastmod>2026-10-28</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://bleoman.com/"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://bleoman.com/ar"/>
     <xhtml:link rel="alternate" hreflang="fa" href="https://bleoman.com/fa"/>
@@ -16,6 +18,7 @@
   </url>
   <url>
     <loc>https://bleoman.com/fa</loc>
+    <lastmod>2026-10-28</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://bleoman.com/"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://bleoman.com/ar"/>
     <xhtml:link rel="alternate" hreflang="fa" href="https://bleoman.com/fa"/>

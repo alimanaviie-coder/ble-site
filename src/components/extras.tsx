@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { dict, isRtl, type Lang } from "@/lib/i18n";
+import { FAQ, FAQ_TITLE } from "@/lib/faq";
 import { WheatEar } from "@/components/Logo";
 import { CONTACT_EMAIL, WHATSAPP_NUMBER } from "@/lib/config";
 import bottleRed from "@/assets/bottle-red.jpg";
@@ -57,8 +58,10 @@ export function Hero({ lang }: { lang: Lang }) {
       <img src={s.src} alt="" aria-hidden="true" className="pointer-events-none absolute inset-0 h-full w-full scale-125 object-cover opacity-30 blur-xl" />
       <div className="relative z-[2] mx-auto grid max-w-6xl items-center gap-10 px-5 py-14 md:grid-cols-2 md:py-20">
         <div>
-          <p className="text-xs uppercase tracking-[0.25em] text-gold-soft">{t.hero.eyebrow}</p>
-          <h1 className="font-display mt-4 text-5xl leading-[1.05] md:text-6xl">{t.hero.title}</h1>
+          <h1 className="font-display text-5xl leading-[1.05] md:text-6xl">
+            <span className="block font-sans text-xs uppercase tracking-[0.25em] text-gold-soft">{t.hero.eyebrow}</span>
+            <span className="mt-4 block">{t.hero.title}</span>
+          </h1>
           <div className="gold-rule my-6 w-24" />
           <p className="max-w-md text-lg text-cream/90">{t.hero.sub}</p>
           <div className="mt-8 flex flex-wrap gap-3">
@@ -164,6 +167,24 @@ export function Reviews({ lang }: { lang: Lang }) {
           ))}
         </ul>
         <p className="mt-6 text-xs text-cream/60">{t.extra.rev.sample}</p>
+      </div>
+    </section>
+  );
+}
+
+export function Faq({ lang }: { lang: Lang }) {
+  return (
+    <section id="faq" className="bg-cream py-20 text-navy" dir={isRtl(lang) ? "rtl" : "ltr"}>
+      <div className="mx-auto max-w-3xl px-5">
+        <h2 className="font-display text-4xl md:text-5xl">{FAQ_TITLE[lang]}</h2>
+        <div className="mt-8 divide-y divide-navy/15 border-y border-navy/15">
+          {FAQ[lang].map((f) => (
+            <details key={f.q} className="group py-4">
+              <summary className="cursor-pointer list-none font-display text-xl marker:hidden">{f.q}</summary>
+              <p className="mt-3 text-navy/80">{f.a}</p>
+            </details>
+          ))}
+        </div>
       </div>
     </section>
   );

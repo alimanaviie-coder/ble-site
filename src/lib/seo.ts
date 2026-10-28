@@ -1,4 +1,5 @@
 import type { Lang } from "@/lib/i18n";
+import { FAQ } from "@/lib/faq";
 
 export const SITE = "https://bleoman.com";
 export const PATHS: Record<Lang, string> = { en: "/", ar: "/ar", fa: "/fa" };
@@ -34,6 +35,16 @@ export function seoHead(lang: Lang) {
       { property: "og:locale", content: c.locale },
       { name: "twitter:title", content: c.title },
       { name: "twitter:description", content: c.desc },
+      { property: "og:image:alt", content: "Blé Pastry & Bakery event catering, Muscat" },
+      {
+        "script:ld+json": {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "@id": url + "#faq",
+          inLanguage: lang,
+          mainEntity: FAQ[lang].map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+        },
+      },
     ],
     links: [
       { rel: "canonical", href: url },
