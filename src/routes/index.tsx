@@ -189,6 +189,7 @@ function Consultation({ lang }: { lang: Lang }) {
   const t = dict[lang].form;
   const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">("idle");
   const openedAt = useRef(0);
+  const [diag, setDiag] = useState("");
   useEffect(() => { openedAt.current = Date.now(); }, []);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [type, setType] = useState("");
@@ -253,6 +254,7 @@ function Consultation({ lang }: { lang: Lang }) {
         },
       });
       ok = r2.ok;
+      setDiag(`push:${"push" in r2 ? r2.push : "skipped"}`);
     } catch {
       ok = false;
     }
@@ -269,6 +271,7 @@ function Consultation({ lang }: { lang: Lang }) {
             <p className="font-display text-3xl">{t.successTitle}</p>
             <p className="mt-2 text-muted-foreground">{t.successBody}</p>
             <Deliver lead={lead} lang={lang} />
+            {diag && typeof window !== "undefined" && window.location.search.includes("debug=1") && <p className="mt-3 text-xs text-muted-foreground" data-diag>{diag}</p>}
             <button className="mt-6 text-sm underline decoration-gold underline-offset-4" onClick={() => setStatus("idle")}>{t.again}</button>
           </div>
         ) : (

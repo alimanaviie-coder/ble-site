@@ -80,15 +80,25 @@ export const submitLead = createServerFn({ method: "POST" })
       return res.ok;
     };
 
+    let pushInfo = "not-run";
     const sendPush = async () => {
-      const topic = process.env["NTFY_TOPIC"];
-      if (!topic) return false;
-      const res = await fetch(`https://ntfy.sh/${encodeURIComponent(topic)}`, {
-        method: "POST",
-        headers: { Title: "New Ble event request", Click: waLink, Priority: "high", Tags: "tada" },
-        body: `${text}\n\nTap to open WhatsApp with the customer.`,
-      });
-      return res.ok;
+      const topic = process.env["NTFY_TOPIC"]?.trim();
+      if (!topic) {
+        pushInfo = "no-topic";
+        return false;
+      }
+      try {
+        const res = await fetch(`https://ntfy.sh/${encodeURIComponent(topic)}`, {
+          method: "POST",
+          headers: { Title: "New Ble event request", Click: waLink, Priority: "high", Tags: "tada" },
+          body: `${text}\n\nTap to open WhatsApp with the customer.`,
+        });
+        pushInfo = res.ok ? "ok" : `http-${res.status}`;
+        return res.ok;
+      } catch (e) {
+        pushInfo = `error-${e instanceof Error ? e.name : "unknown"}`;
+        return false;
+      }
     };
 
     const settle = async (fn: () => Promise<boolean>) => {
@@ -99,5 +109,5 @@ export const submitLead = createServerFn({ method: "POST" })
       }
     };
     const [db, email, push] = await Promise.all([settle(saveDb), settle(sendEmail), settle(sendPush)]);
-    return { ok: db || email || push };
+    return { ok: db || email || push, push: pushInfo };
   });
