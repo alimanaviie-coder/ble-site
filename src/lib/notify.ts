@@ -70,6 +70,7 @@ export const submitLead = createServerFn({ method: "POST" })
       const res = await fetch("https://api.resend.com/emails", {
         method: "POST",
         headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+        signal: AbortSignal.timeout(6000),
         body: JSON.stringify({
           from: "Blé Website <onboarding@resend.dev>",
           to: [CONTACT_EMAIL],
@@ -91,12 +92,42 @@ export const submitLead = createServerFn({ method: "POST" })
         const res = await fetch(`https://ntfy.sh/${encodeURIComponent(topic)}`, {
           method: "POST",
           headers: { Title: "New Ble event request", Click: waLink, Priority: "high", Tags: "tada" },
+          signal: AbortSignal.timeout(5000),
           body: `${text}\n\nTap to open WhatsApp with the customer.`,
         });
         pushInfo = res.ok ? "ok" : `http-${res.status}`;
         return res.ok;
       } catch (e) {
         pushInfo = `error-${e instanceof Error ? e.name : "unknown"}`;
+        return false;
+      }
+    };
+
+    // Telegram alert (token and chat id live only in the Worker environment).
+    let tgInfo = "not-run";
+    const sendTelegram = async () => {
+      const token = process.env["TELEGRAM_BOT_TOKEN"]?.trim();
+      const chat = process.env["TELEGRAM_CHAT_ID"]?.trim();
+      if (!token || !chat) {
+        tgInfo = "no-config";
+        return false;
+      }
+      try {
+        const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          signal: AbortSignal.timeout(6000),
+          body: JSON.stringify({
+            chat_id: chat,
+            text: `New Blé event request\n\n${text}`,
+            disable_web_page_preview: true,
+            reply_markup: { inline_keyboard: [[{ text: "Open WhatsApp with customer", url: waLink }]] },
+          }),
+        });
+        tgInfo = res.ok ? "ok" : `http-${res.status}`;
+        return res.ok;
+      } catch (e) {
+        tgInfo = `error-${e instanceof Error ? e.name : "unknown"}`;
         return false;
       }
     };
@@ -108,6 +139,6 @@ export const submitLead = createServerFn({ method: "POST" })
         return false;
       }
     };
-    const [db, email, push] = await Promise.all([settle(saveDb), settle(sendEmail), settle(sendPush)]);
-    return { ok: db || email || push, push: pushInfo };
+    const [db, email, push, tg] = await Promise.all([settle(saveDb), settle(sendEmail), settle(sendPush), settle(sendTelegram)]);
+    return { ok: db || email || push || tg, push: `${pushInfo}/tg:${tgInfo}` };
   });
