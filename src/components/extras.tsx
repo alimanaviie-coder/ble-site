@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { dict, isRtl, type Lang } from "@/lib/i18n";
 import { FAQ, FAQ_TITLE } from "@/lib/faq";
 import { WheatEar } from "@/components/Logo";
@@ -17,30 +17,31 @@ const goConsult = () => document.getElementById("consult")?.scrollIntoView({ beh
 
 const selectCls = "min-w-32 flex-1 rounded-xl border border-cream/25 bg-ink/40 px-3 py-2.5 text-sm text-cream";
 
-/** Hero: page color morphs per drink, wheat ears sway and sweep across the bottle. */
+/** Hero: brand film on the right, planner form on the left. */
 export function Hero({ lang }: { lang: Lang }) {
   const t = dict[lang];
-  const [i, setI] = useState(0);
-  const [tick, setTick] = useState(0);
-  const [run, setRun] = useState(true);
   const [type, setType] = useState("");
   const [guests, setGuests] = useState("");
+  const [playing, setPlaying] = useState(true);
+  const vref = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    if (!run || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const id = setInterval(() => {
-      setI((n) => (n + 1) % SCENES.length);
-      setTick((n) => n + 1);
-    }, 6000);
-    return () => clearInterval(id);
-  }, [run]);
+    const v = vref.current;
+    if (!v) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      v.pause();
+      setPlaying(false);
+      return;
+    }
+    v.play().catch(() => setPlaying(false));
+  }, []);
 
-  const pick = (n: number) => {
-    setI(n);
-    setTick((x) => x + 1);
+  const toggle = () => {
+    const v = vref.current;
+    if (!v) return;
+    if (v.paused) v.play().then(() => setPlaying(true)).catch(() => undefined);
+    else { v.pause(); setPlaying(false); }
   };
-  const s = SCENES[i]!;
-  const name = t.extra.drinks.names[i] ?? "";
   const submit = () => {
     window.dispatchEvent(new CustomEvent("ble-plan", { detail: { type, guests } }));
     goConsult();
@@ -48,14 +49,9 @@ export function Hero({ lang }: { lang: Lang }) {
 
   return (
     <section
-      className="relative overflow-hidden text-cream transition-colors duration-[1400ms]"
-      style={{
-        backgroundColor: s.bg,
-        backgroundImage: "radial-gradient(ellipse at 65% 45%, #ffffff2e, transparent 62%), linear-gradient(#0000, #0008)",
-        "--glow": s.glow,
-      } as React.CSSProperties}
+      className="relative overflow-hidden text-cream"
+      style={{ backgroundColor: "#09102B", backgroundImage: "radial-gradient(ellipse at 70% 45%, #d9a44122, transparent 62%), linear-gradient(#0000, #0008)" }}
     >
-      <img src={s.src} alt="" aria-hidden="true" className="pointer-events-none absolute inset-0 h-full w-full scale-125 object-cover opacity-30 blur-xl" />
       <div className="relative z-[2] mx-auto grid max-w-6xl items-center gap-10 px-5 py-14 md:grid-cols-2 md:py-20">
         <div>
           <h1 className="font-display text-5xl leading-[1.05] md:text-6xl">
@@ -80,6 +76,83 @@ export function Hero({ lang }: { lang: Lang }) {
           </div>
         </div>
 
+        <div className="relative mx-auto w-full max-w-xl">
+          <div className="relative aspect-video overflow-hidden rounded-[26px] border border-[#d9a441cc]" style={{ boxShadow: "0 40px 80px #000a, 0 0 110px #d9a44133" }}>
+            <video
+              ref={vref}
+              className="h-full w-full object-cover"
+              src="/media/ble-reel.mp4"
+              poster="/media/ble-reel-poster.webp"
+              muted
+              loop
+              autoPlay
+              playsInline
+              preload="auto"
+              aria-label={t.hero.title}
+            />
+            <button
+              type="button"
+              onClick={toggle}
+              aria-label={playing ? t.extra.drinks.pause : t.extra.drinks.play}
+              className="absolute bottom-3 end-3 flex h-10 w-10 items-center justify-center rounded-full border border-gold/70 bg-ink/50 text-cream backdrop-blur hover:bg-ink/70"
+            >
+              {playing ? (
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><rect x="3" y="2" width="3.5" height="12" /><rect x="9.5" y="2" width="3.5" height="12" /></svg>
+              ) : (
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M4 2l10 6-10 6z" /></svg>
+              )}
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/** Drinks showcase: page color morphs per drink, wheat ears sway and sweep across the bottle. */
+export function Drinks({ lang }: { lang: Lang }) {
+  const t = dict[lang];
+  const [i, setI] = useState(0);
+  const [tick, setTick] = useState(0);
+  const [run, setRun] = useState(true);
+
+  useEffect(() => {
+    if (!run || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const id = setInterval(() => {
+      setI((n) => (n + 1) % SCENES.length);
+      setTick((n) => n + 1);
+    }, 6000);
+    return () => clearInterval(id);
+  }, [run]);
+
+  const pick = (n: number) => {
+    setI(n);
+    setTick((x) => x + 1);
+  };
+  const s = SCENES[i]!;
+  const name = t.extra.drinks.names[i] ?? "";
+
+  return (
+    <section
+      id="drinks"
+      dir={isRtl(lang) ? "rtl" : "ltr"}
+      className="relative overflow-hidden text-cream transition-colors duration-[1400ms]"
+      style={{
+        backgroundColor: s.bg,
+        backgroundImage: "radial-gradient(ellipse at 65% 45%, #ffffff2e, transparent 62%), linear-gradient(#0000, #0008)",
+        "--glow": s.glow,
+      } as React.CSSProperties}
+    >
+      <img src={s.src} alt="" aria-hidden="true" className="pointer-events-none absolute inset-0 h-full w-full scale-125 object-cover opacity-30 blur-xl" />
+      <div className="relative z-[2] mx-auto grid max-w-6xl items-center gap-10 px-5 py-14 md:grid-cols-2 md:py-20">
+        <div>
+          <p className="text-xs uppercase tracking-[0.25em] text-gold-soft">{t.extra.drinks.eyebrow}</p>
+          <h2 className="font-display mt-4 text-5xl leading-[1.05] md:text-6xl">{t.extra.drinks.title}</h2>
+          <div className="gold-rule my-6 w-24" />
+          <p className="max-w-md text-lg text-cream/90">{t.extra.drinks.line}</p>
+          <div className="mt-8"><a href="#consult" className="btn-cream">{t.hero.cta1}</a></div>
+        </div>
+
         <div className="relative mx-auto flex min-h-[520px] w-full max-w-md flex-col items-center md:min-h-[560px] md:justify-center">
           <WheatEar className="sway pointer-events-none absolute bottom-[-2%] start-[2%] z-[1] h-[72%] opacity-85" style={{ filter: "blur(1.5px) drop-shadow(0 0 22px var(--glow))" }} />
           <div
@@ -92,7 +165,7 @@ export function Hero({ lang }: { lang: Lang }) {
           <WheatEar className="sway pointer-events-none absolute bottom-[-2%] end-[8%] z-[4] h-[56%]" style={{ filter: "drop-shadow(0 0 18px var(--glow))" }} />
           <div className="relative z-[6] mt-5 w-52 rounded-2xl border border-cream/25 bg-cream/15 p-4 backdrop-blur-md md:absolute md:bottom-[16%] md:end-[-2%] md:mt-0" aria-live="polite">
             <p className="text-xs tracking-[0.2em] text-cream/80">0{i + 1} / 0{SCENES.length}</p>
-            <h2 className="font-display text-2xl">{name}</h2>
+            <h3 className="font-display text-2xl">{name}</h3>
             <p className="mb-3 mt-1 text-xs text-cream/90">{t.extra.drinks.line}</p>
             <a href="#consult" className="btn-outline-gold !px-4 !py-2 text-sm">{t.extra.plan.req}</a>
           </div>

@@ -3,11 +3,11 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import { z } from "zod";
 import { dict, isRtl, LANGS, suggestPackage, type Budget, type Lang, type PackageKey } from "@/lib/i18n";
 import { Logo } from "@/components/Logo";
-import { Gallery, About, Signature, Reel, ABOUT_NAV } from "@/components/about";
+import { Gallery, About, Signature, ABOUT_NAV } from "@/components/about";
 import { seoHead, PATHS } from "@/lib/seo";
 import { Link } from "@tanstack/react-router";
 import { submitLead } from "@/lib/notify";
-import { Hero, MenuSection, Reviews, Faq, FloatingContact, Deliver, type Lead } from "@/components/extras";
+import { Hero, MenuSection, Reviews, Faq, Drinks, FloatingContact, Deliver, type Lead } from "@/components/extras";
 import { INSTAGRAM_URL } from "@/lib/config";
 import imgGathering from "@/assets/pkg-gathering.jpg";
 import imgParty from "@/assets/pkg-party.jpg";
@@ -125,7 +125,7 @@ export function Home({ lang }: { lang: Lang }) {
         </section>
 
         <Gallery lang={lang} />
-        <Reel lang={lang} />
+        <Drinks lang={lang} />
         <About lang={lang} />
         <Suggester lang={lang} />
         <Reviews lang={lang} />

@@ -93,7 +93,7 @@ const en = {
     plan: { type: "Event type", guests: "Guests", go: "Get my proposal", req: "Request this", chip: "Planning an event? Tell us in 30 seconds." },
     rev: { title: "Loved by our guests", sample: "Sample wording while we collect real guest reviews.", q: ["Everything arrived fresh and right on time.", "Our guests kept asking where the food was from.", "Easy to order, and it looked beautiful on the table."] },
     wa: { send: "Send on WhatsApp", mail: "Send by email", note: "Send your request on WhatsApp or email now to speed things up.", hello: "Hello Blé! New consultation request" },
-    drinks: { names: ["Red Juice", "Fresh Lemonade", "Mint Mojito"], line: "Fresh, natural and made with real fruits.", pause: "Pause", play: "Play" },
+    drinks: { eyebrow: "Fresh · Bottled", title: "Chilled drinks, made with real fruit", names: ["Red Juice", "Fresh Lemonade", "Mint Mojito"], line: "Fresh, natural and made with real fruits.", pause: "Pause", play: "Play" },
   },
 };
 type Dict = typeof en;
@@ -164,7 +164,7 @@ const ar: Dict = {
     plan: { type: "نوع المناسبة", guests: "عدد الضيوف", go: "احصل على عرضي", req: "اطلب هذا", chip: "تخطّط لمناسبة؟ أخبرنا في ٣٠ ثانية." },
     rev: { title: "محبوبون من ضيوفنا", sample: "نصوص توضيحية ريثما نجمع تقييمات ضيوفنا الحقيقية.", q: ["وصل كل شيء طازجًا وفي الموعد تمامًا.", "ظل ضيوفنا يسألون من أين الطعام.", "الطلب سهل، وكان شكله جميلًا على المائدة."] },
     wa: { send: "أرسل عبر واتساب", mail: "أرسل بالبريد", note: "أرسل طلبك الآن عبر واتساب أو البريد لتسريع الأمر.", hello: "مرحبًا Blé! طلب استشارة جديد" },
-    drinks: { names: ["العصير الأحمر", "ليمونادة طازجة", "موهيتو بالنعناع"], line: "طازج وطبيعي ومصنوع من فواكه حقيقية.", pause: "إيقاف", play: "تشغيل" },
+    drinks: { eyebrow: "طازج · معبأ", title: "مشروبات باردة من فواكه حقيقية", names: ["العصير الأحمر", "ليمونادة طازجة", "موهيتو بالنعناع"], line: "طازج وطبيعي ومصنوع من فواكه حقيقية.", pause: "إيقاف", play: "تشغيل" },
   },
 };
 
@@ -234,7 +234,7 @@ const fa: Dict = {
     plan: { type: "نوع مراسم", guests: "تعداد مهمان", go: "پیشنهاد من را بده", req: "درخواست این مورد", chip: "مراسم دارید؟ در ۳۰ ثانیه بگویید." },
     rev: { title: "محبوب مهمان‌هایمان", sample: "متن نمونه تا زمان جمع‌آوری نظرهای واقعی مهمان‌ها.", q: ["همه‌چیز تازه و سر وقت رسید.", "مهمان‌ها مدام می‌پرسیدند غذا از کجاست.", "سفارش دادنش راحت بود و روی میز خیلی قشنگ شد."] },
     wa: { send: "ارسال در واتساپ", mail: "ارسال با ایمیل", note: "همین حالا درخواست را در واتساپ یا ایمیل بفرستید تا سریع‌تر هماهنگ شود.", hello: "سلام Blé! درخواست مشاورهٔ جدید" },
-    drinks: { names: ["آب‌میوهٔ قرمز", "لیموناد تازه", "موهیتو نعناع"], line: "تازه، طبیعی و ساخته‌شده از میوهٔ واقعی.", pause: "توقف", play: "پخش" },
+    drinks: { eyebrow: "تازه · بطری", title: "نوشیدنی‌های خنک از میوهٔ واقعی", names: ["آب‌میوهٔ قرمز", "لیموناد تازه", "موهیتو نعناع"], line: "تازه، طبیعی و ساخته‌شده از میوهٔ واقعی.", pause: "توقف", play: "پخش" },
   },
 };
 
