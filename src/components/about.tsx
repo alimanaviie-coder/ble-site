@@ -46,7 +46,7 @@ const galleryTitle: L3<[string, string]> = {
 export function Gallery({ lang }: { lang: Lang }) {
   const [title, sub] = galleryTitle[lang];
   return (
-    <section id="gallery" className="bg-background py-20" dir={isRtl(lang) ? "rtl" : "ltr"}>
+    <section id="gallery" className="bg-cream-deep py-20" dir={isRtl(lang) ? "rtl" : "ltr"}>
       <div className="mx-auto max-w-6xl px-5">
         <h2 className="font-display text-4xl md:text-5xl">{title}</h2>
         <p className="mt-3 text-muted-foreground">{sub}</p>
@@ -96,14 +96,14 @@ const about: L3<{ title: string; lead: string; p1: string; p2: string; cta: stri
 export function About({ lang }: { lang: Lang }) {
   const a = about[lang];
   return (
-    <section id="about" className="bg-navy py-20 text-cream" dir={isRtl(lang) ? "rtl" : "ltr"}>
+    <section id="about" className="bg-cream py-20 text-navy" dir={isRtl(lang) ? "rtl" : "ltr"}>
       <div className="mx-auto max-w-3xl px-5">
         <h2 className="font-display text-4xl text-gold md:text-5xl">{a.title}</h2>
         <div className="my-6 h-px w-24 bg-gold" aria-hidden="true" />
         <p className="font-display text-2xl leading-snug md:text-3xl">{a.lead}</p>
-        <p className="mt-6 text-lg leading-relaxed text-cream/90">{a.p1}</p>
-        <p className="mt-4 text-lg leading-relaxed text-cream/90">{a.p2}</p>
-        <a href="#consult" className="mt-8 inline-block rounded bg-cream px-6 py-3 font-medium text-navy hover:bg-cream/90">{a.cta}</a>
+        <p className="mt-6 text-lg leading-relaxed text-navy/90">{a.p1}</p>
+        <p className="mt-4 text-lg leading-relaxed text-navy/90">{a.p2}</p>
+        <a href="#consult" className="mt-8 inline-block rounded bg-navy px-6 py-3 font-medium text-cream hover:bg-navy/90">{a.cta}</a>
       </div>
     </section>
   );
@@ -123,10 +123,10 @@ export function Signature({ lang }: { lang: Lang }) {
     { src: img_savory_puff, w: 586, h: 1000, alt: gallery.find((g) => g.src === img_savory_puff)!.alt[lang], offset: "md:mt-6" },
   ];
   return (
-    <section id="signature" className="bg-navy py-20 text-cream" dir={isRtl(lang) ? "rtl" : "ltr"}>
+    <section id="signature" className="bg-cream py-20 text-navy" dir={isRtl(lang) ? "rtl" : "ltr"}>
       <div className="mx-auto max-w-6xl px-5">
-        <p className="text-xs uppercase tracking-[0.3em] text-gold-soft">{c.eyebrow}</p>
-        <h2 className="mt-3 max-w-2xl font-display text-4xl text-cream md:text-5xl">{c.title}</h2>
+        <p className="text-xs uppercase tracking-[0.3em] text-gold">{c.eyebrow}</p>
+        <h2 className="mt-3 max-w-2xl font-display text-4xl text-navy md:text-5xl">{c.title}</h2>
         <ul className="mt-12 grid gap-6 md:grid-cols-3 md:gap-8">
           {pics.map((p, i) => (
             <li key={p.src} className={p.offset}>
@@ -134,7 +134,7 @@ export function Signature({ lang }: { lang: Lang }) {
                 <div className="overflow-hidden rounded-t-[999px] border border-gold/50">
                   <img src={p.src} alt={p.alt} width={p.w} height={p.h} loading="lazy" className="aspect-[3/4] w-full object-cover transition-transform duration-1000 hover:scale-105 motion-reduce:transition-none" />
                 </div>
-                <figcaption className="mt-4 font-display text-2xl text-cream/90">{c.items[i]}</figcaption>
+                <figcaption className="mt-4 font-display text-2xl text-navy/90">{c.items[i]}</figcaption>
               </figure>
             </li>
           ))}

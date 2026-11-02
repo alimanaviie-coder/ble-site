@@ -41,18 +41,18 @@ export function Home({ lang }: { lang: Lang }) {
 
   return (
     <div dir={isRtl(lang) ? "rtl" : "ltr"} lang={lang} className="min-h-screen">
-      <header className="sticky top-0 z-30 bg-navy/95 backdrop-blur border-b border-gold/30">
-        <a href="#consult" className="block border-b border-gold/20 bg-ink py-2 text-center text-xs text-gold transition-colors hover:text-cream sm:text-sm">
+      <header className="sticky top-0 z-30 bg-cream/95 backdrop-blur border-b border-gold/30 text-navy">
+        <a href="#consult" className="block border-b border-gold/20 bg-cream-deep py-2 text-center text-xs text-gold transition-colors hover:text-navy sm:text-sm">
           {t.bar.text}
         </a>
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3">
           <a href="#top" aria-label="Blé home"><Logo className="h-10 w-auto md:h-11" /></a>
-          <nav className="hidden gap-6 text-sm text-cream/80 md:flex">
-            <a href="#menu" className="hover:text-cream">{t.nav.menu}</a>
-            <a href="#packages" className="hover:text-cream">{t.nav.packages}</a>
-            <a href="#suggest" className="hover:text-cream">{t.nav.suggest}</a>
-            <a href="#about" className="hover:text-cream">{ABOUT_NAV[lang]}</a>
-            <a href="#consult" className="hover:text-cream">{t.nav.contact}</a>
+          <nav className="hidden gap-6 text-sm text-navy/80 md:flex">
+            <a href="#menu" className="hover:text-navy">{t.nav.menu}</a>
+            <a href="#packages" className="hover:text-navy">{t.nav.packages}</a>
+            <a href="#suggest" className="hover:text-navy">{t.nav.suggest}</a>
+            <a href="#about" className="hover:text-navy">{ABOUT_NAV[lang]}</a>
+            <a href="#consult" className="hover:text-navy">{t.nav.contact}</a>
           </nav>
           <div role="group" aria-label="Language" className="flex rounded border border-gold/50 text-sm">
             {LANGS.map((l) => (
@@ -63,7 +63,7 @@ export function Home({ lang }: { lang: Lang }) {
                 aria-current={lang === l.code ? "page" : undefined}
                 lang={l.code}
                 onClick={() => { try { localStorage.setItem("ble-lang", l.code); } catch { /* ignore */ } }}
-                className={`px-3 py-1.5 ${lang === l.code ? "bg-cream text-navy" : "text-cream/80 hover:text-cream"}`}
+                className={`px-3 py-1.5 ${lang === l.code ? "bg-navy text-cream" : "text-navy/80 hover:text-navy"}`}
               >
                 {l.label}
               </Link>
@@ -77,7 +77,7 @@ export function Home({ lang }: { lang: Lang }) {
         <Hero lang={lang} />
 
         {/* WHAT WE DO */}
-        <section className="border-t border-gold/20 bg-navy text-cream" aria-label={lang === "ar" ? "ما نقدمه" : lang === "fa" ? "آنچه ارائه می‌دهیم" : "What we offer"}>
+        <section className="border-t border-gold/20 bg-cream-deep text-navy" aria-label={lang === "ar" ? "ما نقدمه" : lang === "fa" ? "آنچه ارائه می‌دهیم" : "What we offer"}>
           <div className="mx-auto max-w-6xl px-5 py-8">
             <ul className="grid gap-5 text-center sm:grid-cols-3">
               {t.strip.items.map((item) => (
@@ -87,7 +87,7 @@ export function Home({ lang }: { lang: Lang }) {
                 </li>
               ))}
             </ul>
-            <p className="mt-5 text-center text-sm text-cream/70">{t.strip.types}</p>
+            <p className="mt-5 text-center text-sm text-navy/70">{t.strip.types}</p>
           </div>
         </section>
 
@@ -95,7 +95,7 @@ export function Home({ lang }: { lang: Lang }) {
         <MenuSection lang={lang} />
 
         {/* PACKAGES */}
-        <section id="packages" className="bg-background py-20">
+        <section id="packages" className="bg-cream py-20">
           <div className="mx-auto max-w-6xl px-5">
             <h2 className="font-display text-4xl md:text-5xl">{t.packages.title}</h2>
             <p className="mt-3 max-w-xl text-muted-foreground">{t.packages.sub}</p>
@@ -133,11 +133,11 @@ export function Home({ lang }: { lang: Lang }) {
         <Consultation lang={lang} />
       </main>
 
-      <footer className="bg-ink py-10 text-cream/80">
+      <footer className="border-t border-gold/40 bg-cream-deep py-10 text-navy/80">
         <div className="mx-auto flex max-w-6xl flex-col gap-4 px-5 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-4"><Logo className="h-12 w-auto" /><span className="text-sm">{t.footer.line}</span></div>
           <div className="flex flex-col gap-1 text-sm md:items-end">
-            <a href={IG} target="_blank" rel="noreferrer" className="text-cream hover:text-gold" dir="ltr">Instagram @ble.oman</a>
+            <a href={IG} target="_blank" rel="noreferrer" className="text-navy hover:text-gold" dir="ltr">Instagram @ble.oman</a>
             <span>{t.footer.talabat}</span>
           </div>
         </div>
@@ -154,11 +154,11 @@ function Suggester({ lang }: { lang: Lang }) {
   const pkg = suggestPackage(guests, budget);
   const p = dict[lang].packages.items[pkg];
   return (
-    <section id="suggest" className="bg-navy py-20 text-cream">
+    <section id="suggest" className="bg-cream-deep py-20 text-navy">
       <div className="mx-auto grid max-w-6xl gap-10 px-5 md:grid-cols-2">
         <div>
           <h2 className="font-display text-4xl md:text-5xl">{t.title}</h2>
-          <p className="mt-3 text-cream/75">{t.sub}</p>
+          <p className="mt-3 text-navy/75">{t.sub}</p>
           <label className="mt-8 block text-sm" htmlFor="g">{t.guests}: <strong className="text-lg">{guests}</strong></label>
           <input id="g" type="range" min={5} max={200} value={guests} onChange={(e) => setGuests(+e.target.value)} className="mt-3 w-full accent-[var(--gold)]" />
           <fieldset className="mt-8">
@@ -166,7 +166,7 @@ function Suggester({ lang }: { lang: Lang }) {
             <div className="mt-3 grid grid-cols-3 gap-2">
               {(["simple", "comfortable", "generous"] as Budget[]).map((b) => (
                 <button key={b} type="button" aria-pressed={budget === b} onClick={() => setBudget(b)}
-                  className={`rounded border px-3 py-2.5 text-sm ${budget === b ? "border-cream bg-cream text-navy" : "border-gold/50 text-cream/85 hover:border-cream"}`}>
+                  className={`rounded border px-3 py-2.5 text-sm ${budget === b ? "border-navy bg-navy text-cream" : "border-gold/50 text-navy/85 hover:border-navy"}`}>
                   {t.budgets[b]}
                 </button>
               ))}
@@ -176,10 +176,10 @@ function Suggester({ lang }: { lang: Lang }) {
         <div className="rounded border border-gold/50 p-8" aria-live="polite">
           <p className="text-xs uppercase tracking-[0.25em] text-gold">{t.result}</p>
           <h3 className="font-display mt-3 text-5xl">{p.name}</h3>
-          <p className="mt-1 text-sm text-cream/70">{p.range} {dict[lang].packages.guests}</p>
+          <p className="mt-1 text-sm text-navy/70">{p.range} {dict[lang].packages.guests}</p>
           <div className="gold-rule my-5" />
-          <p className="text-cream/85">{t.notes[pkg]}</p>
-          <a href="#consult" className="btn-cream mt-8">{t.cta}</a>
+          <p className="text-navy/85">{t.notes[pkg]}</p>
+          <a href="#consult" className="btn-navy mt-8">{t.cta}</a>
         </div>
       </div>
     </section>

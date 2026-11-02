@@ -15,7 +15,7 @@ const SCENES = [
 
 const goConsult = () => document.getElementById("consult")?.scrollIntoView({ behavior: "smooth" });
 
-const selectCls = "min-w-32 flex-1 rounded-xl border border-cream/25 bg-ink/40 px-3 py-2.5 text-sm text-cream";
+const selectCls = "min-w-32 flex-1 rounded-xl border border-navy/25 bg-cream px-3 py-2.5 text-sm text-navy";
 
 /** Hero: brand film on the right, planner form on the left. */
 export function Hero({ lang }: { lang: Lang }) {
@@ -49,30 +49,30 @@ export function Hero({ lang }: { lang: Lang }) {
 
   return (
     <section
-      className="relative overflow-hidden text-cream"
-      style={{ backgroundColor: "#09102B", backgroundImage: "radial-gradient(ellipse at 70% 45%, #d9a44122, transparent 62%), linear-gradient(#0000, #0008)" }}
+      className="relative overflow-hidden bg-cream text-navy"
+      style={{ backgroundImage: "radial-gradient(ellipse at 70% 45%, #d9a44130, transparent 62%)" }}
     >
       <div className="relative z-[2] mx-auto grid max-w-6xl items-center gap-10 px-5 py-14 md:grid-cols-2 md:py-20">
         <div>
           <h1 className="font-display text-5xl leading-[1.05] md:text-6xl">
-            <span className="block font-sans text-xs uppercase tracking-[0.25em] text-gold-soft">{t.hero.eyebrow}</span>
+            <span className="block font-sans text-xs uppercase tracking-[0.25em] text-gold">{t.hero.eyebrow}</span>
             <span className="mt-4 block">{t.hero.title}</span>
           </h1>
           <div className="gold-rule my-6 w-24" />
-          <p className="max-w-md text-lg text-cream/90">{t.hero.sub}</p>
+          <p className="max-w-md text-lg text-navy/90">{t.hero.sub}</p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <a href="#consult" className="btn-cream">{t.hero.cta1}</a>
-            <a href="#suggest" className="btn-outline-gold">{t.hero.cta2}</a>
+            <a href="#consult" className="btn-navy">{t.hero.cta1}</a>
+            <a href="#suggest" className="btn-outline-gold !text-navy hover:!bg-gold/10">{t.hero.cta2}</a>
           </div>
-          <div className="mt-8 flex max-w-xl flex-wrap gap-2 rounded-2xl border border-cream/20 bg-cream/10 p-2.5 backdrop-blur">
+          <div className="mt-8 flex max-w-xl flex-wrap gap-2 rounded-2xl border border-navy/15 bg-white/50 p-2.5 backdrop-blur">
             <select aria-label={t.extra.plan.type} value={type} onChange={(e) => setType(e.target.value)} className={selectCls}>
               <option value="">{t.extra.plan.type}</option>
               {Object.entries(t.form.types).map(([k, v]) => (
                 <option key={k} value={k} className="text-black">{v}</option>
               ))}
             </select>
-            <input type="number" min={1} max={5000} value={guests} onChange={(e) => setGuests(e.target.value)} placeholder={t.extra.plan.guests} aria-label={t.extra.plan.guests} className={`${selectCls} placeholder:text-cream/60`} />
-            <button type="button" onClick={submit} className="btn-cream">{t.extra.plan.go}</button>
+            <input type="number" min={1} max={5000} value={guests} onChange={(e) => setGuests(e.target.value)} placeholder={t.extra.plan.guests} aria-label={t.extra.plan.guests} className={`${selectCls} placeholder:text-navy/50`} />
+            <button type="button" onClick={submit} className="btn-navy">{t.extra.plan.go}</button>
           </div>
         </div>
 
@@ -136,21 +136,21 @@ export function Drinks({ lang }: { lang: Lang }) {
     <section
       id="drinks"
       dir={isRtl(lang) ? "rtl" : "ltr"}
-      className="relative overflow-hidden text-cream transition-colors duration-[1400ms]"
+      className="relative overflow-hidden text-navy transition-colors duration-[1400ms]"
       style={{
-        backgroundColor: s.bg,
-        backgroundImage: "radial-gradient(ellipse at 65% 45%, #ffffff2e, transparent 62%), linear-gradient(#0000, #0008)",
+        backgroundColor: `color-mix(in oklab, var(--cream) 94%, ${s.bg})`,
+        backgroundImage: "radial-gradient(ellipse at 65% 45%, #ffffff80, transparent 62%)",
         "--glow": s.glow,
       } as React.CSSProperties}
     >
-      <img src={s.src} alt="" aria-hidden="true" className="pointer-events-none absolute inset-0 h-full w-full scale-125 object-cover opacity-30 blur-xl" />
+      <img src={s.src} alt="" aria-hidden="true" className="pointer-events-none absolute inset-0 h-full w-full scale-125 object-cover opacity-[0.12] blur-xl" />
       <div className="relative z-[2] mx-auto grid max-w-6xl items-center gap-10 px-5 py-14 md:grid-cols-2 md:py-20">
         <div>
-          <p className="text-xs uppercase tracking-[0.25em] text-gold-soft">{t.extra.drinks.eyebrow}</p>
+          <p className="text-xs uppercase tracking-[0.25em] text-gold">{t.extra.drinks.eyebrow}</p>
           <h2 className="font-display mt-4 text-5xl leading-[1.05] md:text-6xl">{t.extra.drinks.title}</h2>
           <div className="gold-rule my-6 w-24" />
-          <p className="max-w-md text-lg text-cream/90">{t.extra.drinks.line}</p>
-          <div className="mt-8"><a href="#consult" className="btn-cream">{t.hero.cta1}</a></div>
+          <p className="max-w-md text-lg text-navy/90">{t.extra.drinks.line}</p>
+          <div className="mt-8"><a href="#consult" className="btn-navy">{t.hero.cta1}</a></div>
         </div>
 
         <div className="relative mx-auto flex min-h-[520px] w-full max-w-md flex-col items-center md:min-h-[560px] md:justify-center">
@@ -158,23 +158,23 @@ export function Drinks({ lang }: { lang: Lang }) {
           <div
             key={i}
             className="pin relative z-[3] aspect-[4/5] w-[min(320px,68vw)] overflow-hidden rounded-t-full rounded-b-[26px] border border-[#d9a441cc]"
-            style={{ boxShadow: `0 40px 80px #000a, 0 0 110px ${s.glow}88` }}
+            style={{ boxShadow: `0 40px 70px #09102B40, 0 0 110px ${s.glow}66` }}
           >
             <img src={s.src} alt={name} width={1024} height={1280} className="h-full w-full object-cover" />
           </div>
           <WheatEar className="sway pointer-events-none absolute bottom-[-2%] end-[8%] z-[4] h-[56%]" style={{ filter: "drop-shadow(0 0 18px var(--glow))" }} />
-          <div className="relative z-[6] mt-5 w-52 rounded-2xl border border-cream/25 bg-cream/15 p-4 backdrop-blur-md md:absolute md:bottom-[16%] md:end-[-2%] md:mt-0" aria-live="polite">
-            <p className="text-xs tracking-[0.2em] text-cream/80">0{i + 1} / 0{SCENES.length}</p>
+          <div className="relative z-[6] mt-5 w-52 rounded-2xl border border-navy/15 bg-cream/85 p-4 backdrop-blur-md md:absolute md:bottom-[16%] md:end-[-2%] md:mt-0" aria-live="polite">
+            <p className="text-xs tracking-[0.2em] text-navy/70">0{i + 1} / 0{SCENES.length}</p>
             <h3 className="font-display text-2xl">{name}</h3>
-            <p className="mb-3 mt-1 text-xs text-cream/90">{t.extra.drinks.line}</p>
-            <a href="#consult" className="btn-outline-gold !px-4 !py-2 text-sm">{t.extra.plan.req}</a>
+            <p className="mb-3 mt-1 text-xs text-navy/80">{t.extra.drinks.line}</p>
+            <a href="#consult" className="btn-outline-gold !px-4 !py-2 text-sm !text-navy hover:!bg-gold/10">{t.extra.plan.req}</a>
           </div>
           <div className="relative z-[6] mt-5 flex items-center gap-3 md:absolute md:bottom-0 md:mt-0">
             {SCENES.map((_, n) => (
               <button key={n} type="button" onClick={() => pick(n)} aria-label={t.extra.drinks.names[n]} aria-pressed={n === i}
-                className={`h-3.5 w-3.5 rounded-full border border-cream transition ${n === i ? "scale-125 bg-cream" : "bg-transparent opacity-70"}`} />
+                className={`h-3.5 w-3.5 rounded-full border border-navy transition ${n === i ? "scale-125 bg-navy" : "bg-transparent opacity-70"}`} />
             ))}
-            <button type="button" onClick={() => setRun((r) => !r)} className="text-xs text-cream/90 underline underline-offset-4">
+            <button type="button" onClick={() => setRun((r) => !r)} className="text-xs text-navy/90 underline underline-offset-4">
               {run ? t.extra.drinks.pause : t.extra.drinks.play}
             </button>
           </div>
@@ -198,7 +198,7 @@ const MENU_ITEMS: string[][] = [
 export function MenuSection({ lang }: { lang: Lang }) {
   const t = dict[lang].extra.menu;
   return (
-    <section id="menu" className="bg-background py-20">
+    <section id="menu" className="bg-cream-deep py-20">
       <div className="mx-auto max-w-6xl px-5">
         <p className="text-xs uppercase tracking-[0.25em] text-gold">{dict[lang].nav.menu}</p>
         <h2 className="font-display mt-2 text-4xl md:text-5xl">{t.title}</h2>
@@ -226,20 +226,20 @@ export function MenuSection({ lang }: { lang: Lang }) {
 export function Reviews({ lang }: { lang: Lang }) {
   const t = dict[lang];
   return (
-    <section id="reviews" className="bg-navy py-20 text-cream" dir={isRtl(lang) ? "rtl" : "ltr"}>
+    <section id="reviews" className="bg-cream py-20 text-navy" dir={isRtl(lang) ? "rtl" : "ltr"}>
       <div className="mx-auto max-w-6xl px-5">
         <h2 className="font-display text-4xl md:text-5xl">{t.extra.rev.title}</h2>
         <ul className="mt-10 grid gap-5 md:grid-cols-3">
           {t.extra.rev.q.map((q) => (
             <li key={q}>
-              <figure className="h-full rounded border border-gold/40 bg-cream/5 p-6">
-                <div className="tracking-[0.25em] text-gold-soft" aria-hidden="true">★★★★★</div>
+              <figure className="h-full rounded border border-gold/40 bg-white/50 p-6">
+                <div className="tracking-[0.25em] text-gold" aria-hidden="true">★★★★★</div>
                 <blockquote className="mt-3 font-display text-2xl leading-snug">“{q}”</blockquote>
               </figure>
             </li>
           ))}
         </ul>
-        <p className="mt-6 text-xs text-cream/60">{t.extra.rev.sample}</p>
+        <p className="mt-6 text-xs text-navy/60">{t.extra.rev.sample}</p>
       </div>
     </section>
   );
@@ -247,7 +247,7 @@ export function Reviews({ lang }: { lang: Lang }) {
 
 export function Faq({ lang }: { lang: Lang }) {
   return (
-    <section id="faq" className="bg-cream py-20 text-navy" dir={isRtl(lang) ? "rtl" : "ltr"}>
+    <section id="faq" className="bg-cream-deep py-20 text-navy" dir={isRtl(lang) ? "rtl" : "ltr"}>
       <div className="mx-auto max-w-3xl px-5">
         <h2 className="font-display text-4xl md:text-5xl">{FAQ_TITLE[lang]}</h2>
         <div className="mt-8 divide-y divide-navy/15 border-y border-navy/15">

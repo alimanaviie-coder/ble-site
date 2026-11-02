@@ -31,6 +31,7 @@
   --color-navy: var(--navy);
   --color-ink: var(--ink);
   --color-cream: var(--cream);
+  --color-cream-deep: var(--cream-deep);
   --color-gold: var(--gold);
   --color-gold-soft: #e6b858;
   --font-display: "Cormorant Garamond", "Vazirmatn", Georgia, serif;
@@ -42,6 +43,7 @@
   --navy: oklch(0.17 0.05 272);
   --ink: oklch(0.2 0 0);
   --cream: oklch(0.993 0.017 100);
+  --cream-deep: color-mix(in oklab, var(--cream) 91%, var(--gold));
   --gold: oklch(0.56 0.11 75);
   --background: var(--cream);
   --foreground: var(--navy);
