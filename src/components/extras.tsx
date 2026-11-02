@@ -25,15 +25,16 @@ export function Hero({ lang }: { lang: Lang }) {
   const [playing, setPlaying] = useState(true);
   const vref = useRef<HTMLVideoElement>(null);
 
+  const [src, setSrc] = useState("");
   useEffect(() => {
-    const v = vref.current;
-    if (!v) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      v.pause();
-      setPlaying(false);
-      return;
-    }
-    v.play().catch(() => setPlaying(false));
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const saver = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
+    if (reduce || saver) { setPlaying(false); return; }
+    const mq = window.matchMedia("(min-width: 768px)");
+    const pick = () => setSrc(mq.matches ? "/media/ble-hero-desktop.mp4" : "/media/ble-hero-mobile.mp4");
+    pick();
+    mq.addEventListener("change", pick);
+    return () => mq.removeEventListener("change", pick);
   }, []);
 
   const toggle = () => {
@@ -76,20 +77,26 @@ export function Hero({ lang }: { lang: Lang }) {
           </div>
         </div>
 
-        <div className="relative mx-auto w-full max-w-xl">
-          <div className="relative aspect-video overflow-hidden rounded-[26px] border border-[#d9a441cc]" style={{ boxShadow: "0 40px 80px #000a, 0 0 110px #d9a44133" }}>
-            <video
-              ref={vref}
-              className="h-full w-full object-cover"
-              src="/media/ble-reel.mp4"
-              poster="/media/ble-reel-poster.webp"
-              muted
-              loop
-              autoPlay
-              playsInline
-              preload="auto"
-              aria-label={t.hero.title}
-            />
+        <div className="relative mx-auto w-full max-w-sm md:max-w-xl">
+          <div className="relative aspect-[4/5] overflow-hidden rounded-[26px] border border-[#d9a441cc] bg-navy md:aspect-video" style={{ boxShadow: "0 40px 70px #09102B40, 0 0 110px #d9a44133" }}>
+            <picture>
+              <source media="(min-width: 768px)" srcSet="/media/ble-hero-desktop-poster.webp" />
+              <img src="/media/ble-hero-mobile-poster.webp" alt={t.hero.title} width={540} height={676} fetchPriority="high" decoding="async" className="absolute inset-0 h-full w-full object-cover" />
+            </picture>
+            {src && (
+              <video
+                key={src}
+                ref={vref}
+                className="absolute inset-0 h-full w-full object-cover"
+                src={src}
+                muted
+                loop
+                autoPlay
+                playsInline
+                preload="auto"
+                aria-hidden="true"
+              />
+            )}
             <button
               type="button"
               onClick={toggle}
