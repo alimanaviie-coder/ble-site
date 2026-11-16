@@ -1,7 +1,7 @@
 import type { Lang } from "@/lib/i18n";
 import { FAQ } from "@/lib/faq";
 
-export const SITE = "https://bleoman.com";
+export const SITE = "https://www.bleoman.com";
 export const PATHS: Record<Lang, string> = { en: "/", ar: "/ar", fa: "/fa" };
 
 const COPY: Record<Lang, { title: string; desc: string; locale: string }> = {

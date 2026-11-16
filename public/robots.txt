@@ -13,4 +13,4 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://bleoman.com/sitemap.xml
+Sitemap: https://www.bleoman.com/sitemap.xml
